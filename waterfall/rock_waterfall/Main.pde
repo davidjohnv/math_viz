@@ -1,9 +1,7 @@
 // Rocky Water Fall
 // Author: David Vitt
 
-// TODO: Add more rocks
-
-Waterfall w;
+Waterfall w; 
 Waterfall w2;
 
 int size = 400;
@@ -16,15 +14,15 @@ int rock_y=size-40;
 
 void setup(){
   size(400, 400);
-
+  
   // create the first instance of a waterfall
   w = new Waterfall();
   w2 = new Waterfall();
   background(255);
-
+  
   // Draw Rock
   rect(rock_x, rock_y, rock_width, rock_height);
-
+  
 }
 
 void draw(){
