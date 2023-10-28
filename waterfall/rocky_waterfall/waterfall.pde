@@ -19,7 +19,7 @@ class Waterfall{
   
   // Render the droplet
   void render(){
-    stroke(0,0,200-random(100));
+    stroke(0,0,200-random(200));
     fill(random(20),random(20), fill_color);
     circle(x,y,drop_size);
   }
@@ -46,7 +46,7 @@ class Waterfall{
        if (v_x == 0){
          v_x = int(random(-5,5));
        }
-       v_y = -v_y/2;
+       v_y = -v_y/int(random(2,4));
      }else{
      
        // If you go below screen, reset new drop
