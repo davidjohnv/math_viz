@@ -6,21 +6,27 @@ class Waterfall{
   int x,y;
   int dropy;
   int a_y;
-  int v_y, v_x=0;
+  float v_y, v_x=0;
   int drop_size;
-  int fill_color;
+  int r, g, b;
   int water_height=height/9;
   
   // init waterfall
   Waterfall() {
     x = width/2;
     y = water_height;
+    r=int(random(20));
+    g=int(200-random(100));
+    b=int(200-random(200));
+    constrain(g, 0, b);
   }
   
   // Render the droplet
   void render(){
-    stroke(0,0,200-random(200));
-    fill(random(20),random(20), fill_color);
+    
+    
+    stroke(r,g,b);
+    fill(r,g,b);
     circle(x,y,drop_size);
   }
 
@@ -33,10 +39,6 @@ class Waterfall{
     // velocity of
     v_y += a_y;
      
-     // y position
-     y += v_y; 
-     x += v_x;
-     
      // Rock Bounce handeling
     
      // If the droplet is lower than the rock and between the rock x
@@ -46,7 +48,7 @@ class Waterfall{
        if (v_x == 0){
          v_x = int(random(-5,5));
        }
-       v_y = -v_y/int(random(2,4));
+       v_y = -v_y*random(0.25,0.9);
      }else{
      
        // If you go below screen, reset new drop
@@ -56,9 +58,15 @@ class Waterfall{
          y = water_height - int(random(10));
          x = width/2 + int(random(-width/5, width/5));
          drop_size = int(random(10));
-         fill_color = 200 - int(random(150));
+         r=int(random(20));
+         g=int(200-random(100));
+         b=int(200-random(200));
      }
     }
+ 
+     // Update position
+     y += v_y; 
+     x += v_x;
   }
   
 }
