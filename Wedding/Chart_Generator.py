@@ -66,7 +66,9 @@ def make_age_piechart(csv_file):
     plt.figure(figsize=(8, 8))
     plt.pie(age_distribution, labels=age_distribution.index, autopct="%1.1f%%", startangle=140)
     plt.title("Age Distribution of Guests")
-    plt.show()
+    # Save the figure as a PNG file
+    plt.savefig("Wedding/output/Age_distribution.png", dpi=300, bbox_inches="tight")
+    # plt.show()
     pass
 
 def make_job_piechart(csv_file):
@@ -74,25 +76,51 @@ def make_job_piechart(csv_file):
     # Load csv
     df = pd.read_csv(csv_file)
 
+    # Strip leading and trailing spaces from job names
+    df["Job Industry"] = df["Job Industry"].str.strip()
+
     # Remove rows where Job Industry is missing or unknown
     df = df.dropna(subset=["Job Industry"])  # Remove NaN values
     df = df[df["Job Industry"] != "?"]  # Remove "?" values if they exist
 
     # Count occurrences of each job industry
-    job_distribution = df["Job Industry"].value_counts()
+    job_counts = df["Job Industry"].value_counts()
 
-    # Remove industries with zero occurrences (just in case)
-    job_distribution = job_distribution[job_distribution > 0]
+    # Define threshold for grouping into "Other"
+    threshold = 3  # Any job industry with less than this count will be grouped into "Other"
+
+    # Separate industries with enough occurrences from those that go into "Other"
+    main_jobs = job_counts[job_counts >= threshold]
+    other_jobs = job_counts[job_counts < threshold]
+
+    # Create a new distribution including "Other"
+    job_distribution = main_jobs.copy()
+    if not other_jobs.empty:
+        job_distribution["Other"] = other_jobs.sum()
+
+    # Prepare labels for the pie chart
+    labels = job_distribution.index.tolist()
+
+    # Modify "Other" label to include the job names in parentheses
+    if "Other" in labels:
+        other_jobs_list = ", ".join(other_jobs.index)
+        labels[labels.index("Other")] = f"Other ({other_jobs_list})"
+
 
     # Plot pie chart
     plt.figure(figsize=(8, 8))
     plt.pie(job_distribution, labels=job_distribution.index, autopct="%1.1f%%", startangle=140)
     plt.title("Job Industry Distribution")
-    plt.show()
+    print(other_jobs_list)
+
+    # Save the figure as a PNG file
+    plt.savefig("Wedding/output/job_industry_distribution.png", dpi=300, bbox_inches="tight")
+    # plt.show()
+
 
 if __name__ == "__main__":
-    age_industry_csv = "Wedding\Age_&_Idustry.csv"
+    age_industry_csv = "Wedding/Age_&_Idustry.csv"
 
     # make_heatmap()
-    # make_age_piechart(age_industry_csv)
+    make_age_piechart(age_industry_csv)
     make_job_piechart(age_industry_csv)
