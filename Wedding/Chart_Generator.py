@@ -117,10 +117,33 @@ def make_job_piechart(csv_file):
     plt.savefig("Wedding/output/job_industry_distribution.png", dpi=300, bbox_inches="tight")
     # plt.show()
 
+def make_meeting_piechart(csv_file):
+
+    # Load CSV file
+    df = pd.read_csv(csv_file)
+
+    # Strip leading and trailing spaces from the column
+    df["How Did We Meet You"] = df["How Did We Meet You"].str.strip()
+
+    # Count occurrences of each category
+    meet_counts = df["How Did We Meet You"].value_counts()
+
+    # Plot pie chart
+    plt.figure(figsize=(8, 8))
+    plt.pie(meet_counts, labels=meet_counts.index, autopct="%1.1f%%", startangle=140)
+    plt.title("How Did We Meet You")
+
+    # Save the figure as a PNG file
+    plt.savefig("Wedding\output\how_we_meet_people.png", dpi=300, bbox_inches="tight")
+
+    # Show the plot
+
 
 if __name__ == "__main__":
     age_industry_csv = "Wedding/Age_&_Idustry.csv"
+    meeting_csv = "Wedding\Age_&_Idustry&Meeting.csv"
 
     # make_heatmap()
     make_age_piechart(age_industry_csv)
     make_job_piechart(age_industry_csv)
+    make_meeting_piechart(meeting_csv)
